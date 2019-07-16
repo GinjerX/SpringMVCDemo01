@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ps.mapper.StudentMapper">
+
+    <!--查询学生-->
+    <select id="studentQuery" resultType="StudentVO">
+        select s.id,s.name,s.age,s.sex,d.number,t.address
+        from student_p s left join dorm_p d ON(s.dormId=d.id) LEFT JOIN tower_p t on(d.towerId=t.id)
+    </select>
+
+    <!--删除id-->
+    <delete id="delete" parameterType="Integer">
+        DELETE FROM student_p WHERE id = #{id}
+    </delete>
+
+    <!-- 插入学生 -->
+    <insert id="insert" parameterType="StudentVO">
+        insert into student_p(name,age,sex,dormId)
+        values(#{name},#{age},#{sex},#{dormId})
+    </insert>
+
+    <!--修改学生-->
+    <update id="update" parameterType="StudentVO">
+        UPDATE student_p
+            SET name = #{name},
+                age = #{age},
+                sex = #{sex},
+                dormId = #{dormId}
+         WHERE id = #{id}
+    </update>
+
+    <!--统计学生 爱好 和 爱好人数-->
+    <select id="hobbyStu" resultType="StuHobbyVO">
+                SELECT
+            h.likes ,
+            count(h.id) as count
+        FROM
+            stu_hobby_rel r
+        LEFT JOIN hobby h ON (r.hobby_id = h.id)
+        GROUP BY
+            h.id
+    </select>
+
+    <select id="listQueryhabby" resultMap="stulikes">
+        select h.id hid,s.id sid,s.name sname,h.likes hlikes
+        from student_p s
+        left join stu_hobby_rel  r on(r.student_id=s.id)
+        left join hobby h on(h.id=r.hobby_id)
+    </select>
+
+    <resultMap id="stulikes" type="com.ps.vo.StudentVO">
+        <id column="sid" property="id"></id>
+        <result column="sname" property="name"></result>
+        <collection property="hobbylist" ofType="com.ps.vo.StuHobbyVO" column="hid">
+            <result  property="id" column="hid"></result>
+            <result property="likes" column="hlikes"></result>
+        </collection>
+    </resultMap>
+
+</mapper>

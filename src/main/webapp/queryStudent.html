@@ -1,0 +1,406 @@
+		<style>
+			.modal-backdrop{
+			z-index:998;
+		}
+		.modal-backdrop.in {
+		    filter: alpha(opacity=50);
+		    opacity: 0;
+		}
+		.modal-backdrop {
+		    position: inherit;
+		    top: 0;
+		    right: 0;
+		    bottom: 0;
+		    left: 0;
+		    z-index: 1040;
+		    background-color: #000;
+		}
+         .demo-carousel{height: 200px; line-height: 200px; text-align: center;}
+         .layui-table-page{
+             display: none;
+         }
+         #loop{
+             width: 150px;
+             height: 150px;
+             line-height: 150px;
+             margin: 0 auto 10px;
+             text-align: center;
+             background-color: #009688;
+             cursor: pointer;
+             color: #fff;
+             border-radius: 50%
+         }
+         .modal-backdrop fade in{
+         	opacity: 0;
+         }
+         .modal fade{
+         	z-index: 9999;
+         }
+         .layui-form-label{
+            width:105px;
+         }
+         .layui-table-page{
+         	display: block;
+         
+         }
+        </style>
+		
+		<script src="StudentFunction/addStudent.js" type="text/javascript" charset="utf-8"></script><!-- 增加 -->
+		<script src="StudentFunction/updateStudent.js" type="text/javascript" charset="utf-8"></script><!-- 修改 -->
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4 class="panel-title">
+					<a data-toggle="collapse" data-parent="#accordion" href="#collapsefive">
+						选择查询
+					</a>
+				</h4>
+			</div>
+			<div id="collapsefive" class="panel-collapse collapse">
+
+				<div class="panel-body">
+
+					<div style="width: 100%;" id="selectDiv">
+						<!-- 名字  年龄  性别  爱好 学历 -->
+						<div class="input-group" style="float: left;width: 300px;margin-top: 25px;margin-right: 15px; margin-left: 35px; margin-bottom: 10px;">
+							<!-- 名字 -->
+							<span class="input-group-addon">名字</span>
+							<input type="text" class="form-control" placeholder="学生名字" id="selectName">
+						</div>
+
+
+						<div class="input-group" style="float: left;width: 300px;margin-top: 25px;margin-right: 15px;">
+							<!-- 年龄 -->
+							<span class="input-group-addon">年龄</span>
+							<input type="number" class="form-control" value="" id="selectAge" min="0">
+						</div>
+
+						<div id="selectSex" style="float: left;width: 300px;margin-right: 15px;">
+							<!-- 性别 -->
+							<label for="name">请选择性别</label>
+							<select class="form-control">
+								<option value=""> </option>
+								<option value="M">男</option>
+								<option value="F">女</option>
+							</select>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 表格 -->
+		<table class="layui-hide" id="demo" lay-filter="test"></table>
+		<!-- 分页条 -->
+		<div id="demo7"></div>
+
+		<!-- 按钮触发模态框 -->
+		<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#addModal" id="addBtn" style="display: none;">增加学生</button>
+		<!-- 模态框（Modal） -->
+		<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog" style="    margin-top: 10%;">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title" id="myModalLabel">请填写增加的学生信息</h4>
+					</div>
+					<div class="modal-body">
+
+						<div style="padding:30px;">
+							<form class="bs-example bs-example-form" id="addFrom" role="form">
+								<div class="input-group">
+									<span class="input-group-addon">姓名</span>
+									<input type="text" class="form-control" placeholder="请输入3-5个汉字" id="addName">
+								</div>
+								<br>
+								<div class="input-group">
+									<span class="input-group-addon">年龄</span>
+									<input type="text" class="form-control" placeholder="请输入正确的数字" id="addAge">
+								</div>
+								<br>
+								<div id="addSex">
+									<label for="name">请选择性别</label>
+									<label class="radio-inline">
+										<input type="radio" name="addSex" id="optionsRadios1" value="M" checked>男
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="addSex" id="optionsRadios2" value="F">女
+									</label>
+								</div>
+								<br>
+								<div class="input-group">
+									<span class="input-group-addon">宿舍id</span>
+									<input type="text" class="form-control" placeholder="请输入正确的宿舍编号" id="addDormId">
+								</div>
+							</form>
+						</div>
+					</div>
+
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+						<button type="button" class="btn btn-primary" data-dismiss="modal" id="affirmAdd">确认增加</button>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+
+		<!-- 按钮触发模态框 -->
+		<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#updateModal" id="updateBtn" style="display: none;">修改学生</button>
+		<!-- 修改模态框（Modal） -->
+
+		<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel" aria-hidden="true">
+			<div class="modal-dialog" style="    margin-top: 10%;">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title" id="updateModalLabel">请填写修改的学生信息</h4>
+					</div>
+					<div class="modal-body">
+
+						<div style="padding:30px;">
+							<form class="bs-example bs-example-form" role="form">
+								<div class="input-group">
+									<span class="input-group-addon">姓名</span>
+									<input type="text" class="form-control" placeholder="请输入3-5个汉字" id="updateName">
+								</div>
+								<br>
+								<div class="input-group">
+									<span class="input-group-addon">年龄</span>
+									<input type="text" class="form-control" placeholder="请输入正确的数字" id="updateAge">
+								</div>
+								<br>
+								<div id="updateSex">
+									<label class="radio-inline">
+										<input type="radio" name="updateSex" id="optionsRadios3" value="M" checked>男
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="updateSex" id="optionsRadios4" value="F">女
+									</label>
+								</div>
+								<br>
+								<div class="input-group">
+									<span class="input-group-addon">宿舍编号</span>
+									<input type="text" class="form-control" placeholder="请输入正确的宿舍编号" id="updateDormId">
+								</div>
+							</form>
+						</div>
+					</div>
+
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+						<button type="button" class="btn btn-primary" data-dismiss="modal" id="affirmUpdate">确认修改</button>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+
+		<div class="site-demo-button" id="layerDemo" style="margin-bottom: 0;">
+			<button data-method="offset" data-type="auto" class="layui-btn layui-btn-normal" style="display: none;">居中弹出</button>
+		</div>
+	<!-- 导入JS包 -->
+	<script type="text/javascript" src="static/layui/layui.all.js" charset="utf-8"></script>
+	<script type="text/javascript" src="static/layui/lay/modules/table.js" charset="utf-8"></script>
+
+	<!-- 表格中的功能键 -->
+	<script type="text/html" id="barDemo">
+		<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+		<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+		<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+	</script>
+	<script type="text/javascript">
+		var total = 0;
+		/* 分页功能 */
+		var jsono;
+
+		var tempMsg; //修改时创建全局变量
+		/* 初始化表格 */
+
+		var table = layui.table //表格 
+		//第一个实例
+		
+		var studentMsg = table.render({
+			elem: '#demo',
+			height: 550,
+			skin: 'line ',
+			toolbar: 'default', //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+			defaultToolbar: ['filter', 'print'],
+			url: "/student/queryStu.do", //数据接口
+			page: true,
+			response: {
+			  statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
+			},
+			cols: [
+				[ //表头
+					{
+						field: 'checkbox',
+						title: "选择",
+						align: 'center',
+						fixed: 'left',
+						width: '5%',
+						type: 'checkbox',
+					}, {
+						field: 'id',
+						title: '学生编号',
+						sort: true,
+						fixed: 'left',
+						width: '10%',
+						align: 'center'
+					}, {
+						field: 'name',
+						title: '姓名',
+						width: '10%',
+						align: 'center'
+					}, {
+						field: 'age',
+						title: '年龄',
+						width: '10%',
+						sort: true,
+						align: 'center'
+					},{
+						field: 'sex',
+						title: '性别',
+						width: '10%',
+						align: 'center',
+						templet: function(value) {
+							if (value.sex == "F") {
+								return "女";
+							} else {
+								return "男";
+							}
+							console.log(value);
+						}
+					},{
+						field: 'number',
+						title: '宿舍编号',
+						width: '10%',
+						sort: true,
+						align: 'center'
+					},
+					{
+						field: 'address',
+						title: '宿舍楼地址',
+						width: '10%',
+						sort: true,
+						align: 'center'
+					},
+					
+				]
+			]
+		});
+		//监听头工具栏事件
+		table.on('toolbar(test)', function(obj) {
+			var checkStatus = table.checkStatus(obj.config.id),
+				data = checkStatus.data; //获取选中的数据
+			switch (obj.event) {
+				case 'add':
+					$("#addBtn").click();
+					$("#addFrom")[0].reset();
+
+					var likeArr = $("input[name=addLike]"); //爱好
+
+					for (let i = 0; i < likeArr.length; i++) {
+						if ($(likeArr[i]).val() == "6") {
+							likeArr[i].checked = true;
+						}
+					}
+					break;
+				case 'update':
+					if (data.length === 0) {
+						layer.msg('请选择一行');
+					} else if (data.length > 1) {
+						layer.msg('只能同时编辑一个');
+					} else {
+						$("#updateBtn").click();
+
+						tempMsg = checkStatus.data[0]; //全局变量拿值
+						$("#updateName").val(tempMsg.name); //姓名
+						$("#updateAge").val(tempMsg.age); //年龄
+						$("#updatePhone").val(tempMsg.iphone); //手机号码
+						$("#updateAddress").val(tempMsg.address); //地址
+						var sexArr = $("input[name=updateSex]"); //性别
+						for (let i = 0; i < sexArr.length; i++) {
+							if ($(sexArr[i]).val() == tempMsg.sex) {
+								$(sexArr[i]).attr("checked", true);
+							}
+						}
+						$("#updateDormId").val(tempMsg.dormId); 
+					}
+					break;
+				case 'delete':
+					if (data.length === 0) {
+						layer.msg('请选择一行');
+					} else {
+						tempMsg = checkStatus.data[0];
+						$('#layerDemo .layui-btn').click(); //弹出确认删除框
+					}
+					break;
+			};
+		});
+
+
+		function affirmDel() {
+			var id = tempMsg.id;
+			var info = {
+				url: "/student/delete.do?id=" + id,
+				type: "GET",
+				dataType: "json",
+				success: function(check) {
+					if (check.judge == "1") {
+						layer.msg("ID不存在");
+					} else {
+						var options = {
+							url: "/student/queryStu.do",
+						}
+						studentMsg.reload(options);
+						layer.msg('删除成功');
+					}
+				},
+				error: function() {
+					layer.msg('网络错误,删除失败');
+				}
+			}
+			$.ajax(info);
+		}
+
+		layui.use('layer', function() { //独立版的layer无需执行这一句
+			var $ = layui.jquery,
+				layer = layui.layer; //独立版的layer无需执行这一句
+			//触发事件
+			var active = {
+				setTop: function() {
+					var that = this; //多窗口模式，层叠置顶
+				},
+				offset: function(othis) {
+					var type = othis.data('type')
+					layer.open({
+						type: 1,
+						offset: type,
+						id: 'layerDemo' + type, //防止重复弹出
+						content: '<div style="padding: 20px 100px;">你确认要删除学生:' + tempMsg.name +
+							'吗？</div>',
+						btn: ['确认删除', '取消删除'],
+						closeBtn: "1",
+						btnAlign: 'c', //按钮居中
+						shade: 0.5, //不显示遮罩
+						yes: function() {
+							affirmDel(); //确认删除
+							layer.closeAll();
+						},
+						btn2: function(index, layero) {
+							return true;
+						}
+					});
+				}
+			};
+
+			$('#layerDemo .layui-btn').on('click', function() {
+				var othis = $(this),
+					method = othis.data('method');
+				active[method] ? active[method].call(this, othis) : '';
+			});
+		});
+	</script>

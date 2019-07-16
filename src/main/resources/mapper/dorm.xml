@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ps.mapper.DormMapper" >
+    <!--学生查询-->
+    <select id="query" parameterType="com.ps.vo.DormVO" resultType="com.ps.vo.DormVO">
+        select d.id,d.number,t.id tomerId,t.name towerName from dorm_p d LEFT JOIN tower_p t on(d.towerId = t.id)
+    </select>
+    <!--删除id-->
+    <delete id="delete" parameterType="Integer">
+        DELETE FROM dorm_p WHERE id = #{id}
+    </delete>
+    <!-- 插入 -->
+    <insert id="insert" parameterType="com.ps.vo.DormVO">
+        insert into dorm_p(number,towerId)
+        values(#{number},#{towerId})
+    </insert>
+    <!--修改-->
+    <update id="update" parameterType="com.ps.vo.DormVO">
+        UPDATE dorm_p
+            SET number = #{number},
+                towerId = #{towerId},
+         WHERE id = #{id}
+    </update>
+
+    <!--统计宿舍人数-->
+    <select id="countQuery" parameterType="com.ps.vo.DormVO" resultType="com.ps.vo.DormVO">
+        SELECT t.id as 'towerId',d.number,count(d.id) FROM dorm_p d
+        LEFT JOIN student_p s ON(d.id=s.dormId)
+        LEFT JOIN tower_p t ON(t.id= d.towerId)
+        group BY d.id
+    </select>
+</mapper>
